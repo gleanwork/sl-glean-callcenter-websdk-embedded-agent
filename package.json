@@ -1,0 +1,47 @@
+{
+  "name": "sl-glean-callcenter-websdk-embedded-agent",
+  "version": "1.0.0",
+  "description": "Customer-facing example showing how to embed a Glean Agent into a call center support workflow using the Glean Web SDK.",
+  "private": false,
+  "scripts": {
+    "start": "python3 -m http.server 8080 --directory site",
+    "check": "node scripts/check-static-site.mjs",
+    "build": "tsc --noEmit",
+    "test": "jest",
+    "cdk:synth": "cdk synth",
+    "cdk:deploy": "cdk deploy",
+    "cdk:destroy": "cdk destroy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gleanwork/sl-glean-callcenter-websdk-embedded-agent.git"
+  },
+  "keywords": [
+    "glean",
+    "websdk",
+    "agent",
+    "aws-cdk",
+    "cloudfront",
+    "s3"
+  ],
+  "author": "Glean",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gleanwork/sl-glean-callcenter-websdk-embedded-agent/issues"
+  },
+  "homepage": "https://github.com/gleanwork/sl-glean-callcenter-websdk-embedded-agent#readme",
+  "dependencies": {
+    "aws-cdk-lib": "^2.253.0",
+    "constructs": "^10.6.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.6.0",
+    "aws-cdk": "^2.1121.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}

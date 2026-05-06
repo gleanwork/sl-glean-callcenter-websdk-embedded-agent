@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' https://app.glean.com https://*.glean.com; script-src 'self' https://app.glean.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://app.glean.com https://*.glean.com; frame-src https://app.glean.com https://*.glean.com;"
+    />
+    <title>Call Center Embedded Agent | Glean Web SDK</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="https://app.glean.com/embedded-search-latest.min.js"></script>
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">Solutions Library Example</p>
+        <h1>Embed a Glean Agent in a Call Center Workspace</h1>
+        <p class="lede">
+          This sample shows how a customer-facing app can send page context to a
+          Glean Agent embedded with the Web SDK.
+        </p>
+      </div>
+      <div class="header-actions" aria-label="Page actions">
+        <a class="tertiary-action" href="https://developers.glean.com/libraries/web-sdk/components/chat" target="_blank" rel="noreferrer">
+          Web SDK docs
+        </a>
+        <button id="open-config" class="icon-button" type="button" aria-label="Configure Glean Agent">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z" />
+            <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .9l-.04.1a2 2 0 0 1-3.82 0l-.04-.1a1.7 1.7 0 0 0-1-.9 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.9-1l-.1-.04a2 2 0 0 1 0-3.82l.1-.04a1.7 1.7 0 0 0 .9-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.9l.04-.1a2 2 0 0 1 3.82 0l.04.1a1.7 1.7 0 0 0 1 .9 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.17.43.5.78.9 1l.1.04a2 2 0 0 1 0 3.82l-.1.04c-.4.22-.73.57-.9 1Z" />
+          </svg>
+        </button>
+        <button id="toggle-agent" class="primary-button" type="button" aria-controls="agent-panel" aria-expanded="false">
+          Glean Agent
+        </button>
+      </div>
+    </header>
+
+    <main id="workspace" class="workspace">
+      <section class="panel customer-panel" aria-labelledby="customer-heading">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Acme Support</p>
+            <h2 id="customer-heading">Case #CS-1049</h2>
+          </div>
+          <span class="status-pill">Live Call</span>
+        </div>
+
+        <div class="customer-card">
+          <div class="avatar" aria-hidden="true">MJ</div>
+          <div>
+            <h3>Maya Johnson</h3>
+            <p>Enterprise plan, renewal in 21 days</p>
+          </div>
+        </div>
+
+        <dl class="case-details">
+          <div>
+            <dt>Issue</dt>
+            <dd>Unable to invite contractors to a shared workspace</dd>
+          </div>
+          <div>
+            <dt>Priority</dt>
+            <dd>High</dd>
+          </div>
+          <div>
+            <dt>Account health</dt>
+            <dd>At risk</dd>
+          </div>
+        </dl>
+
+        <div class="knowledge-hints">
+          <h3>Relevant context in the app</h3>
+          <ul>
+            <li>Customer has SSO enabled through Okta.</li>
+            <li>Contractor access was disabled in last quarter's policy update.</li>
+            <li>Renewal owner asked support to flag blockers within one business day.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel transcript-panel" aria-labelledby="transcript-heading">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Conversation</p>
+            <h2 id="transcript-heading">Call Transcript</h2>
+          </div>
+          <button id="send-transcript" class="primary-button" type="button">
+            Send transcript to AI
+          </button>
+        </div>
+
+        <div id="transcript" class="transcript" aria-live="polite">
+          <p><strong>Customer:</strong> We need to add three contractors today, but they keep getting blocked.</p>
+          <p><strong>Agent:</strong> I see the workspace is using Okta SSO. Are these contractors in your identity provider?</p>
+          <p><strong>Customer:</strong> They are in Okta as external users. This worked last month.</p>
+          <p><strong>Agent:</strong> I am checking policy changes and account notes before recommending next steps.</p>
+        </div>
+
+        <div class="quick-actions" aria-label="Suggested actions">
+          <button type="button" data-prompt="Summarize the customer issue and identify the likely policy blocker.">
+            Summarize issue
+          </button>
+          <button type="button" data-prompt="Draft a response explaining the contractor access policy and next steps.">
+            Draft response
+          </button>
+          <button type="button" data-prompt="List renewal risk signals from this support case.">
+            Identify renewal risk
+          </button>
+        </div>
+      </section>
+
+      <aside id="agent-panel" class="panel chat-panel" aria-labelledby="chat-heading" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Glean Agent</p>
+            <h2 id="chat-heading">Embedded Assistant</h2>
+          </div>
+          <div class="panel-actions">
+            <span id="chat-status" class="status-pill neutral">Ready</span>
+            <button class="icon-button small" type="button" data-config-trigger aria-label="Configure Glean Agent">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z" />
+                <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .9l-.04.1a2 2 0 0 1-3.82 0l-.04-.1a1.7 1.7 0 0 0-1-.9 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.9-1l-.1-.04a2 2 0 0 1 0-3.82l.1-.04a1.7 1.7 0 0 0 .9-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.9l.04-.1a2 2 0 0 1 3.82 0l.04.1a1.7 1.7 0 0 0 1 .9 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.17.43.5.78.9 1l.1.04a2 2 0 0 1 0 3.82l-.1.04c-.4.22-.73.57-.9 1Z" />
+              </svg>
+            </button>
+            <button id="close-agent" class="icon-button small" type="button" aria-label="Close Glean Agent">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m6.4 5 12.6 12.6-1.4 1.4L5 6.4 6.4 5Zm12.6 1.4L6.4 19 5 17.6 17.6 5 19 6.4Z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="glean-chat" class="glean-chat" role="region" aria-label="Embedded Glean chat">
+          <div class="empty-state">Open the Glean Agent or send case context to start a chat.</div>
+        </div>
+      </aside>
+    </main>
+
+    <dialog id="config-dialog" class="config-dialog" aria-labelledby="config-heading">
+      <form id="config-form" class="config-form" method="dialog">
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow">Configuration</p>
+            <h2 id="config-heading">Glean Agent settings</h2>
+          </div>
+          <button id="close-config" class="icon-button small" type="button" aria-label="Close configuration">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="m6.4 5 12.6 12.6-1.4 1.4L5 6.4 6.4 5Zm12.6 1.4L6.4 19 5 17.6 17.6 5 19 6.4Z" />
+            </svg>
+          </button>
+        </div>
+        <p class="config-help">
+          Use these values to point the example at your Glean deployment and, optionally, a specific Agent.
+        </p>
+        <div class="config-fields">
+          <label>
+            Web app URL
+            <input id="web-app-url" name="webAppUrl" type="url" placeholder="https://app.glean.com" />
+          </label>
+          <label>
+            Backend URL
+            <input id="backend-url" name="backend" type="url" placeholder="https://your-company-be.glean.com/" />
+          </label>
+          <label>
+            Agent ID
+            <input id="agent-id" name="agentId" type="text" placeholder="Optional: use default Assistant" />
+          </label>
+        </div>
+        <div class="dialog-actions">
+          <button class="secondary-button" type="button" data-close-config>Cancel</button>
+          <button class="primary-button" type="submit">Apply configuration</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

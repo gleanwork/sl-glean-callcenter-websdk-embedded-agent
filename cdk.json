@@ -1,0 +1,21 @@
+{
+  "app": "npx ts-node --prefer-ts-exts bin/sl-glean-callcenter-websdk-embedded-agent.ts",
+  "watch": {
+    "include": [
+      "bin/**/*.ts",
+      "lib/**/*.ts",
+      "site/**/*"
+    ],
+    "exclude": [
+      "README.md",
+      "AGENTS.md",
+      "cdk*.json",
+      "node_modules",
+      "test"
+    ]
+  },
+  "context": {
+    "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": true,
+    "@aws-cdk/core:stackRelativeExports": true
+  }
+}
