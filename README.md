@@ -99,6 +99,7 @@ Run all local checks:
 
 ```bash
 npm run check
+npm run audit
 npm run build
 npm test
 npm run cdk:synth
@@ -123,6 +124,14 @@ Destroy the stack:
 ```bash
 npm run cdk:destroy
 ```
+
+By default, the S3 bucket is retained when the stack is destroyed. This is safer for production deployments because it prevents accidental asset deletion. For short-lived demo stacks where cleanup is desired, deploy with:
+
+```bash
+npm run cdk:deploy -- -c siteRemovalPolicy=destroy
+```
+
+Only use `siteRemovalPolicy=destroy` for disposable environments.
 
 ## Custom Domain Deployment
 
@@ -155,6 +164,16 @@ npm run cdk:deploy -- \
 
 After deploy, create the required DNS record with your DNS provider pointing the custom domain to the CloudFront distribution domain output by CDK.
 
+## Embedding in Another Portal
+
+The default CloudFront security headers allow the site to frame itself only. If you need to embed the deployed site in another portal, pass a comma-separated list of allowed frame ancestors:
+
+```bash
+npm run cdk:deploy -- -c frameAncestors=https://solutions.example.com
+```
+
+Keep this list as narrow as possible.
+
 ## How Context Is Sent to the Agent
 
 The important pattern is in `site/app.js`:
@@ -170,8 +189,10 @@ When a support rep clicks "Send transcript to AI", the sample builds a prompt fr
 - Do not hardcode private Agent IDs, backend URLs, API keys, AWS account IDs, or customer data in source.
 - Keep server-to-server token creation on your backend. Browser code should only receive short-lived auth tokens.
 - The CDK stack deploys a private S3 bucket and serves the site through CloudFront Origin Access Control.
+- The CDK stack retains the S3 bucket by default on destroy. Use `-c siteRemovalPolicy=destroy` only for disposable demo environments.
 - Update the Content Security Policy in `site/index.html` and `lib/static-site-stack.ts` if your Glean deployment, asset host, or app domain differs from the default sample.
 - Treat `initialMessage` as user-visible prompt content. Avoid sending sensitive context unless your application has already authorized the current user to access it.
+- Report security issues privately. See `SECURITY.md`.
 
 ## For Coding Agents
 

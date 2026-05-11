@@ -25,6 +25,9 @@ jobs:
       - name: Validate static site
         run: npm run check
 
+      - name: Audit runtime dependencies
+        run: npm run audit
+
       - name: Build CDK app
         run: npm run build
 

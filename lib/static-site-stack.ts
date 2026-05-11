@@ -22,11 +22,15 @@ interface CustomDomainConfig {
   readonly hostedZoneName?: string;
 }
 
+type SiteRemovalPolicy = "retain" | "destroy";
+
 export class StaticSiteStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const customDomain = this.getCustomDomainConfig();
+    const siteRemovalPolicy = this.getSiteRemovalPolicy();
+    const frameAncestors = this.getFrameAncestors();
     const domainNames = customDomain.domainName ? [customDomain.domainName] : undefined;
     const certificate = customDomain.certificateArn
       ? acm.Certificate.fromCertificateArn(this, "ImportedCertificate", customDomain.certificateArn)
@@ -39,11 +43,11 @@ export class StaticSiteStack extends Stack {
     }
 
     const siteBucket = new s3.Bucket(this, "SiteBucket", {
-      autoDeleteObjects: true,
+      autoDeleteObjects: siteRemovalPolicy === "destroy",
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: siteRemovalPolicy === "destroy" ? RemovalPolicy.DESTROY : RemovalPolicy.RETAIN,
     });
 
     const responseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(this, "SecurityHeadersPolicy", {
@@ -57,14 +61,10 @@ export class StaticSiteStack extends Stack {
             "img-src 'self' data: https:; " +
             "connect-src 'self' https://app.glean.com https://*.glean.com; " +
             "frame-src https://app.glean.com https://*.glean.com; " +
-            "object-src 'none'; base-uri 'self'; frame-ancestors 'self'",
+            `object-src 'none'; base-uri 'self'; frame-ancestors ${frameAncestors}`,
           override: true,
         },
         contentTypeOptions: {
-          override: true,
-        },
-        frameOptions: {
-          frameOption: cloudfront.HeadersFrameOption.DENY,
           override: true,
         },
         referrerPolicy: {
@@ -152,6 +152,32 @@ export class StaticSiteStack extends Stack {
       hostedZoneId: this.node.tryGetContext("hostedZoneId"),
       hostedZoneName: this.node.tryGetContext("hostedZoneName"),
     };
+  }
+
+  private getSiteRemovalPolicy(): SiteRemovalPolicy {
+    const rawValue = this.node.tryGetContext("siteRemovalPolicy") ?? "retain";
+    if (rawValue !== "retain" && rawValue !== "destroy") {
+      throw new Error("siteRemovalPolicy must be either 'retain' or 'destroy'.");
+    }
+    return rawValue;
+  }
+
+  private getFrameAncestors(): string {
+    const rawValue = this.node.tryGetContext("frameAncestors");
+    if (!rawValue) {
+      return "'self'";
+    }
+
+    const ancestors = String(rawValue)
+      .split(",")
+      .map((ancestor) => ancestor.trim())
+      .filter(Boolean);
+
+    if (ancestors.length === 0) {
+      return "'self'";
+    }
+
+    return ["'self'", ...ancestors].join(" ");
   }
 
   private addDnsRecordIfConfigured(

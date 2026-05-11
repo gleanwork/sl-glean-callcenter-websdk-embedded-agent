@@ -10,7 +10,8 @@
     "test": "jest",
     "cdk:synth": "cdk synth",
     "cdk:deploy": "cdk deploy",
-    "cdk:destroy": "cdk destroy"
+    "cdk:destroy": "cdk destroy",
+    "audit": "npm audit --omit=dev --package-lock=false --audit-level=high"
   },
   "repository": {
     "type": "git",
@@ -31,14 +32,12 @@
     "url": "https://github.com/gleanwork/sl-glean-callcenter-websdk-embedded-agent/issues"
   },
   "homepage": "https://github.com/gleanwork/sl-glean-callcenter-websdk-embedded-agent#readme",
-  "dependencies": {
-    "aws-cdk-lib": "^2.253.0",
-    "constructs": "^10.6.0"
-  },
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^25.6.0",
     "aws-cdk": "^2.1121.0",
+    "aws-cdk-lib": "^2.253.1",
+    "constructs": "^10.6.0",
     "jest": "^30.3.0",
     "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
