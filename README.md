@@ -14,6 +14,20 @@ The sample is intentionally static: no application backend, no API keys, and no 
 - Runtime configuration for `webAppUrl`, `backend`, and `agentId`
 - AWS CDK deployment to CloudFront backed by a private S3 bucket
 
+## Screenshots
+
+Default two-pane support workspace:
+
+![Call center workspace without the Glean Agent pane](docs/images/callcenter-workspace-default.png)
+
+Workspace with the embedded Glean Agent pane open:
+
+![Call center workspace with the Glean Agent pane open](docs/images/callcenter-workspace-agent-open.png)
+
+Workspace with the embedded Glean Agent pane authenticated:
+
+![Call center workspace with the Glean Agent pane authenticated](docs/images/callcenter-workspace-agent-logged-in.png)
+
 ## Repository Layout
 
 ```text
